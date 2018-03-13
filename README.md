@@ -10,7 +10,7 @@ When you use this repository, the settings you set on the TTN console are taken 
 
 Resin Dockerfile & scripts for [The Things Network](http://thethingsnetwork.org/) gateways based on the Beaglebone Black. This updated version uses the gateway connector protocol, not the old packet forwarder. See the [TTN documentation on Gateway Registration](https://www.thethingsnetwork.org/docs/gateways/registration.html).
 
-Currently the Beaglebone Black with one of the following gateway board, communicating over SPI, are supported and tested:
+Currently the Beaglebone Black with the following gateway board, communicating over SPI, is supported and tested:
 * [IMST iC880A-SPI](http://webshop.imst.de/ic880a-spi-lorawan-concentrator-868mhz.html). This has been tested with the [lorrier breakout board](https://github.com/lorriercom/lorrier-lr2/tree/master/hardware-bbg-ic880a).
 
 ## Prerequisites

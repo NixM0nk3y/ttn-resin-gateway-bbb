@@ -29,18 +29,8 @@ if os.environ.get('HALT') != None:
 
 # Show info about the machine we're running on
 print ("*** Resin Machine Info:")
-print ("*** Type: "+str(os.environ.get('RESIN_MACHINE_NAME')))
-print ("*** Arch: "+str(os.environ.get('RESIN_ARCH')))
-print ("*** GW_ID: "+str(os.environ.get('GW_ID')))
-print ("*** GW_KEY: "+str(os.environ.get('GW_KEY')))
-print ("*** Python_ver: "+sys.version)
-
-if os.environ.get("RESIN_HOST_CONFIG_core_freq")!=None:
-  print ("*** Core freq: "+str(os.environ.get('RESIN_HOST_CONFIG_core_freq')))
-
-if os.environ.get("RESIN_HOST_CONFIG_dtoverlay")!=None:
-  print ("*** UART mode: "+str(os.environ.get('RESIN_HOST_CONFIG_dtoverlay')))
-
+print ("*** Type: Beaglebone Black")
+print ("*** Arch: armv7")
 
 # Check if the correct environment variables are set
 
