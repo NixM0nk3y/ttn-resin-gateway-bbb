@@ -5,6 +5,24 @@ INSTALL_DIR="/opt/ttn-gateway"
 mkdir -p $INSTALL_DIR/dev
 cd $INSTALL_DIR/dev
 
+if [ ! -d beaglebone-universal-io ]; then
+    git clone https://github.com/cdsteinkuehler/beaglebone-universal-io  || { echo 'beaglebone-universal-io.' ; exit 1; }
+else
+    cd beaglebone-universal-io
+    git reset --hard
+    git pull
+    cd ..
+fi
+
+if [ ! -d Lorank ]; then
+    git clone https://github.com/Ideetron/Lorank.git  || { echo 'Cloning lorank failed.' ; exit 1; }
+else
+    cd Lorank
+    git reset --hard
+    git pull
+    cd ..
+fi
+
 if [ ! -d lora_gateway ]; then
     git clone https://github.com/kersing/lora_gateway.git  || { echo 'Cloning lora_gateway failed.' ; exit 1; }
 else
@@ -13,6 +31,7 @@ else
     git pull
     cd ..
 fi
+
 
 if [ ! -d paho.mqtt.embedded-c ]; then
     git clone https://github.com/kersing/paho.mqtt.embedded-c.git  || { echo 'Cloning paho mqtt failed.' ; exit 1; }
@@ -59,10 +78,18 @@ else
     cd ..
 fi
 
+cd $INSTALL_DIR/dev/beaglebone-universal-io
+cp ./config-pin $INSTALL_DIR/
+
+cd $INSTALL_DIR/dev/Lorank/lorank8v1
+g++ -O2 -Wall ResetIC880A.cpp -o ResetIC880A
+cp ./ResetIC880A $INSTALL_DIR/
+
 cd $INSTALL_DIR/dev/lora_gateway/libloragw
-sed -i -e 's/PLATFORM= .*$/PLATFORM= imst_rpi/g' library.cfg
+sed -i -e 's/PLATFORM= .*$/PLATFORM= lorank/g' library.cfg
 sed -i -e 's/CFG_SPI= .*$/CFG_SPI= native/g' library.cfg
 make -j$(nproc)
+cp ./test_loragw_* $INSTALL_DIR/
 
 cd $INSTALL_DIR/dev/protobuf-c
 ./autogen.sh

@@ -11,14 +11,12 @@
   * The gateway owner's contact information. Will be overridden by the value from the TTN console.
 * GW_DESCRIPTION optional - default an empty string
   * A description of this gateway. Will be overridden by the value from the TTN console.
-* GW_RESET_PIN - default 22
-  * The physical pin number on the Raspberry Pi to which the concentrator's reset is connected. See the [README](README.md) file for a description and a list of common values.
 * GW_GPS optional - default False
-  * If true, use the hardware GPS. 
-  * If false, 
-    * use either fake gps if a location was configured in the TTN console, 
-    * otherwise try using fake gps with the reference location as set via environment variables, 
-    * otherwise don't send coordinates. 
+  * If true, use the hardware GPS.
+  * If false,
+    * use either fake gps if a location was configured in the TTN console,
+    * otherwise try using fake gps with the reference location as set via environment variables,
+    * otherwise don't send coordinates.
 * GW_GPS_PORT optional - default /dev/ttyAMA0
   * The UART to which the hardware GPS is connected to.
 * GW_REF_LATITUDE optional - default 0
@@ -42,7 +40,7 @@
 All server variables are optional, but when a server is enabled, it is recommended to set all variables to configure it completely.
 * SERVER_TTN optional - default true
   Should the gateway connect to the TTN backend
-  
+
 * SERVER_1_ENABLED optional - default false
 * SERVER_1_TYPE - default "semtech"
 * SERVER_1_ADDRESS
@@ -100,13 +98,13 @@ Use `true` and `false` as lower case words to enable or disable features via env
 
 # Logal debugging
 ```
-docker run --device /dev/ttyAMA0:/dev/ttyAMA0 --device /dev/mem:/dev/mem --privileged -e GW_TYPE="imst-ic880a-spi" -e GW_DESCRIPTION="test gateway" -e GW_CONTACT_EMAIL="" -e GW_ID="" -e GW_KEY="" newforwarder
+docker run --device /dev/ttyAMA0:/dev/ttyAMA0 --privileged -e GW_TYPE="imst-ic880a-spi" -e GW_DESCRIPTION="test gateway" -e GW_CONTACT_EMAIL="" -e GW_ID="" -e GW_KEY="" newforwarder
 
 
 ```
 Make a copy of `Dockerfile.template` to `Dockerfile`.
 ```
-FROM resin/raspberrypi-buildpack-deps
+FROM resin/beaglebone-black-buildpack-deps
 ...
 CMD ["bash"]
 ```

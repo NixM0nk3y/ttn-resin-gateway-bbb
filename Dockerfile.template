@@ -4,7 +4,7 @@ WORKDIR /opt/ttn-gateway/
 
 # downloading utils
 RUN apt-get update && \
-    apt-get install wget build-essential libc6-dev git pkg-config protobuf-compiler libprotobuf-dev libprotoc-dev automake libtool autoconf python-dev python-rpi.gpio
+    apt-get install wget build-essential libc6-dev git pkg-config protobuf-compiler libprotobuf-dev libprotoc-dev automake libtool autoconf
 
 COPY dev dev
 RUN ./dev/build.sh
@@ -14,11 +14,14 @@ FROM resin/%%RESIN_MACHINE_NAME%%-debian:latest
 WORKDIR /opt/ttn-gateway
 
 RUN apt-get update && \
-    apt-get install python-rpi.gpio && \
+    apt-get install ntpdate python && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=buildstep /opt/ttn-gateway/mp_pkt_fwd .
+COPY --from=buildstep /opt/ttn-gateway/ResetIC880A .
+COPY --from=buildstep /opt/ttn-gateway/config-pin /usr/bin/
+COPY --from=buildstep /opt/ttn-gateway/test_loragw_* ./
 COPY --from=buildstep /usr/local/lib/libpaho-embed-* /usr/lib/
 COPY --from=buildstep /usr/lib/libttn* /usr/lib/
 

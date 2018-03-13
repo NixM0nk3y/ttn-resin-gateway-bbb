@@ -16,10 +16,6 @@ try:
   import urlparse
 except:
   import urllib.parse as urlparse
-try:
-  import RPi.GPIO as GPIO
-except RuntimeError:
-  print("Error importing RPi.GPIO!  This is probably because you need superuser privileges.  You can achieve this by using 'sudo' to run your script")
 
 GWID_PREFIX="FFFE"
 
@@ -35,6 +31,9 @@ if os.environ.get('HALT') != None:
 print ("*** Resin Machine Info:")
 print ("*** Type: "+str(os.environ.get('RESIN_MACHINE_NAME')))
 print ("*** Arch: "+str(os.environ.get('RESIN_ARCH')))
+print ("*** GW_ID: "+str(os.environ.get('GW_ID')))
+print ("*** GW_KEY: "+str(os.environ.get('GW_KEY')))
+print ("*** Python_ver: "+sys.version)
 
 if os.environ.get("RESIN_HOST_CONFIG_core_freq")!=None:
   print ("*** Core freq: "+str(os.environ.get('RESIN_HOST_CONFIG_core_freq')))
@@ -90,7 +89,7 @@ if(os.getenv('SERVER_TTN', "true")=="true"):
     req.add_header('Authorization', 'Key '+os.environ.get("GW_KEY"))
     response = urllib2.urlopen(req, timeout=30)
     config_response = response.read()
-  except urllib2.URLError as err: 
+  except urllib2.URLError as err:
     print ("Unable to fetch configuration from TTN. Are your GW_ID and GW_KEY correct?")
     sys.exit(0)
 
@@ -160,7 +159,7 @@ try:
   global_conf_object = json.loads(global_conf)
   if('SX1301_conf' in global_conf_object):
     sx1301_conf = global_conf_object['SX1301_conf']
-except urllib2.URLError as err: 
+except urllib2.URLError as err:
   print ("Unable to fetch global conf from Github")
   sys.exit(0)
 
@@ -304,36 +303,11 @@ with open('/opt/ttn-gateway/global_conf.json', 'w') as the_file:
 
 # Endless loop to reset and restart packet forwarder
 while True:
-  # Reset the gateway board - this only works for the Raspberry Pi.
-  GPIO.setmode(GPIO.BOARD) # hardware pin numbers, just like gpio -1
+  # Reset the gateway board.
 
-  if (os.environ.get("GW_RESET_PIN")!=None):
-    try:
-      pin_number = int(os.environ.get("GW_RESET_PIN"))
-      print ("[TTN Gateway]: Resetting concentrator on pin "+str(os.environ.get("GW_RESET_PIN")))
-      GPIO.setup(pin_number, GPIO.OUT, initial=GPIO.LOW)
-      GPIO.output(pin_number, 0)
-      time.sleep(0.1)
-      GPIO.output(pin_number, 1)
-      time.sleep(0.1)
-      GPIO.output(pin_number, 0)
-      time.sleep(0.1)
-      GPIO.input(pin_number)
-      GPIO.cleanup(pin_number)
-    except ValueError:
-      print ("Can't interpret "+os.environ.get("GW_RESET_PIN")+" as a valid pin number.")
+  print ("[TTN Gateway]: Resetting concentrator on GPIO pin 14.")
+  subprocess.call("/opt/ttn-gateway/ResetIC880A", shell=True)
 
-  else:
-    print ("[TTN Gateway]: Resetting concentrator on default pin 22.")
-    GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.output(22, 0)
-    time.sleep(0.1)
-    GPIO.output(22, 1)
-    time.sleep(0.1)
-    GPIO.output(22, 0)
-    time.sleep(0.1)
-    GPIO.input(22)
-    GPIO.cleanup(22)
 
   # Start forwarder
   subprocess.call("/opt/ttn-gateway/mp_pkt_fwd -c /opt/ttn-gateway", shell=True)
