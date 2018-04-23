@@ -22,6 +22,7 @@ COPY --from=buildstep /opt/ttn-gateway/mp_pkt_fwd .
 COPY --from=buildstep /opt/ttn-gateway/ResetIC880A .
 COPY --from=buildstep /opt/ttn-gateway/config-pin /usr/bin/
 COPY --from=buildstep /opt/ttn-gateway/test_loragw_* ./
+COPY --from=buildstep /opt/ttn-gateway/util_pkt_logger .
 COPY --from=buildstep /usr/local/lib/libpaho-embed-* /usr/lib/
 COPY --from=buildstep /usr/lib/libttn* /usr/lib/
 
