@@ -91,10 +91,6 @@ sed -i -e 's/CFG_SPI= .*$/CFG_SPI= native/g' library.cfg
 make -j$(nproc)
 cp ./test_loragw_* $INSTALL_DIR/
 
-cd $INSTALL_DIR/dev/lora_gateway/util_pkt_logger
-make -j$(nproc)
-cp ./util_pkt_logger $INSTALL_DIR/
-
 cd $INSTALL_DIR/dev/protobuf-c
 ./autogen.sh
 ./configure
