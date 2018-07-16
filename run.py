@@ -305,8 +305,8 @@ with open('/opt/ttn-gateway/global_conf.json', 'w') as the_file:
 while True:
   # Reset the gateway board.
 
-  print ("[TTN Gateway]: Resetting concentrator on GPIO pin 14.")
-  subprocess.call("/opt/ttn-gateway/ResetIC880A", shell=True)
+  print ("[TTN Gateway]: Resetting concentrator on GPIO pin 48.")
+  subprocess.call("/opt/ttn-gateway/reset", shell=True)
 
 
   # Start forwarder

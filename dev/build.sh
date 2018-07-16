@@ -14,24 +14,14 @@ else
     cd ..
 fi
 
-if [ ! -d Lorank ]; then
-    git clone https://github.com/Ideetron/Lorank.git  || { echo 'Cloning lorank failed.' ; exit 1; }
-else
-    cd Lorank
-    git reset --hard
-    git pull
-    cd ..
-fi
-
 if [ ! -d lora_gateway ]; then
-    git clone https://github.com/kersing/lora_gateway.git  || { echo 'Cloning lora_gateway failed.' ; exit 1; }
+    git clone https://github.com/NixM0nk3y/lora_gateway.git  || { echo 'Cloning lora_gateway failed.' ; exit 1; }
 else
     cd lora_gateway
     git reset --hard
     git pull
     cd ..
 fi
-
 
 if [ ! -d paho.mqtt.embedded-c ]; then
     git clone https://github.com/kersing/paho.mqtt.embedded-c.git  || { echo 'Cloning paho mqtt failed.' ; exit 1; }
@@ -81,13 +71,11 @@ fi
 cd $INSTALL_DIR/dev/beaglebone-universal-io
 cp ./config-pin $INSTALL_DIR/
 
-cd $INSTALL_DIR/dev/Lorank/lorank8v1
-g++ -O2 -Wall ResetIC880A.cpp -o ResetIC880A
-cp ./ResetIC880A $INSTALL_DIR/
+cd $INSTALL_DIR/dev
+gcc -O2 -Wall reset.c -o reset
+cp ./reset $INSTALL_DIR/
 
 cd $INSTALL_DIR/dev/lora_gateway/libloragw
-sed -i -e 's/PLATFORM= .*$/PLATFORM= lorank/g' library.cfg
-sed -i -e 's/CFG_SPI= .*$/CFG_SPI= native/g' library.cfg
 make -j$(nproc)
 cp ./test_loragw_* $INSTALL_DIR/
 
