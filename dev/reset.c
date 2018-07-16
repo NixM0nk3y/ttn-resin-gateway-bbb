@@ -60,3 +60,15 @@ int gpio_set_value(unsigned int gpio, unsigned int value)
         if (value==GPIO_LOW) write(fd, "0", 2); else write(fd, "1", 2);
         close(fd);
         return 0; }
+
+/* Pulse the concentrator reset line once. */
+int main(int argc, char *argv[])
+{ gpio_export(RESET);
+  gpio_set_dir(RESET, GPIO_OUTPUT);
+  gpio_set_value(RESET, GPIO_LOW);
+  usleep(10000);
+  gpio_set_value(RESET, GPIO_HIGH);
+  usleep(10000);
+  gpio_set_value(RESET, GPIO_LOW);
+  return 0; }
+

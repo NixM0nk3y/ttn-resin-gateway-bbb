@@ -72,7 +72,7 @@ cd $INSTALL_DIR/dev/beaglebone-universal-io
 cp ./config-pin $INSTALL_DIR/
 
 cd $INSTALL_DIR/dev
-gcc -O2 -Wall reset.c -o reset
+gcc -o reset reset.c
 cp ./reset $INSTALL_DIR/
 
 cd $INSTALL_DIR/dev/lora_gateway/libloragw
