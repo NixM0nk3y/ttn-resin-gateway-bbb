@@ -6,6 +6,8 @@ WORKDIR /opt/ttn-gateway/
 RUN apt-get update && \
     apt-get install wget build-essential libc6-dev git pkg-config protobuf-compiler libprotobuf-dev libprotoc-dev automake libtool autoconf
 
+COPY dev dev
+
 RUN ./dev/build.sh
 
 FROM resin/%%RESIN_MACHINE_NAME%%-debian:latest
