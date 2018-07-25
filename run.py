@@ -308,7 +308,8 @@ while True:
   print ("[TTN Gateway]: Resetting concentrator on GPIO pin 48.")
   subprocess.call("/opt/ttn-gateway/reset", shell=True)
 
+  time.sleep(3)
 
   # Start forwarder
-  subprocess.call("/opt/ttn-gateway/mp_pkt_fwd -c /opt/ttn-gateway", shell=True)
+  subprocess.call(['/opt/ttn-gateway/mp_pkt_fwd', '-c', '/opt/ttn-gateway/', '-s', os.getenv('SPI_SPEED', '8000000')])
   time.sleep(15)
