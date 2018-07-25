@@ -66,9 +66,9 @@ int main(int argc, char *argv[])
 { gpio_export(RESET);
   gpio_set_dir(RESET, GPIO_OUTPUT);
   gpio_set_value(RESET, GPIO_LOW);
-  usleep(10000);
+  sleep(1);
   gpio_set_value(RESET, GPIO_HIGH);
-  usleep(10000);
+  sleep(1);
   gpio_set_value(RESET, GPIO_LOW);
   return 0; }
 
