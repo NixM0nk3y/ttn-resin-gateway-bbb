@@ -31,6 +31,9 @@ RUN ./dev/build.sh
 
 FROM resin/%%RESIN_MACHINE_NAME%%-debian:latest
 
+ENV NODE_EXPORTER_VERSION 0.16.0
+ENV DIST_ARCH linux-armv7
+
 RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
