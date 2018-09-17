@@ -19,10 +19,10 @@ WORKDIR /opt/gwexporter
 
 RUN tar xvzf /opt/ttn-gateway/gwexporter.tgz
 
-RUN wget https://nodejs.org/dist/{NODEJS_VERSION}/node-{NODEJS_VERSION}-${DIST_ARCH}l.tar.gz \
-	&& tar xvzf node-{NODEJS_VERSION}-${DIST_ARCH}l.tar.gz \
-	&& mv node-{NODEJS_VERSION}-{${DIST_ARCH}l/* . \
-&& rm -rf node-{NODEJS_VERSION}-{${DIST_ARCH}}l
+RUN wget https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-${DIST_ARCH}l.tar.gz \
+	&& tar xvzf node-${NODEJS_VERSION}-${DIST_ARCH}l.tar.gz \
+	&& mv node-${NODEJS_VERSION}-${DIST_ARCH}l/* . \
+&& rm -rf node-${NODEJS_VERSION}-${DIST_ARCH}}l
 
 WORKDIR /opt/ttn-gateway/
 COPY dev dev
