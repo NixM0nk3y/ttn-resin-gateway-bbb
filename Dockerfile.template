@@ -1,19 +1,50 @@
 FROM resin/%%RESIN_MACHINE_NAME%%-debian:latest AS buildstep
 
-WORKDIR /opt/ttn-gateway/
+ENV NODE_EXPORTER_VERSION 0.16.0
+ENV NODEJS_VERSION v10.9.0
+ENV DIST_ARCH linux-armv7
 
 # downloading utils
 RUN apt-get update && \
     apt-get install wget build-essential libc6-dev git pkg-config protobuf-compiler libprotobuf-dev libprotoc-dev automake libtool autoconf
 
+WORKDIR /etc
+
+RUN wget https://github.com/prometheus/node_exporter/releases/download/${NODE_EXPORTER_VERSION}/node_exporter-${NODE_EXPORTER_VERSION}.${DIST_ARCH}.tar.gz  \
+	&& tar xvfz node_exporter-${NODE_EXPORTER_VERSION}.${DIST_ARCH}.tar.gz \
+        && rm node_exporter-${NODE_EXPORTER_VERSION}.${DIST_ARCH}.tar.gz
+
+COPY gwexporter.tgz /opt/ttn-gateway/gwexporter.tgz
+WORKDIR /opt/gwexporter
+
+RUN tar xvzf /opt/ttn-gateway/gwexporter.tgz
+
+RUN wget https://nodejs.org/dist/{NODEJS_VERSION}/node-{NODEJS_VERSION}-${DIST_ARCH}l.tar.gz \
+	&& tar xvzf node-{NODEJS_VERSION}-${DIST_ARCH}l.tar.gz \
+	&& mv node-{NODEJS_VERSION}-{${DIST_ARCH}l/* . \
+&& rm -rf node-{NODEJS_VERSION}-{${DIST_ARCH}}l
+
+WORKDIR /opt/ttn-gateway/
 COPY dev dev
 
 RUN ./dev/build.sh
 
 FROM resin/%%RESIN_MACHINE_NAME%%-debian:latest
 
-WORKDIR /opt/ttn-gateway
+RUN apt-get update && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
+# Enable systemd
+ENV INITSYSTEM on
+
+WORKDIR /etc
+COPY --from=buildstep /etc/node_exporter-${NODE_EXPORTER_VERSION}.${DIST_ARCH} .
+
+WORKDIR /opt/gwexporter
+COPY --from=buildstep /opt/gwexporter .
+
+WORKDIR /opt/ttn-gateway
 RUN apt-get update && \
     apt-get install ntpdate python && \
     apt-get clean && \
